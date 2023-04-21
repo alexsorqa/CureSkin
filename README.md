@@ -1,0 +1,2 @@
+# CureSkin
+Internship project
