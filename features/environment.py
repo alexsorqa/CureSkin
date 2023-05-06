@@ -18,24 +18,41 @@ def browser_init(context, test_name):
     :param context: Behave context
     :param test_name: scenario.name
     """
+
     service = Service('/Users/asorokin/Desktop/careerist/CureSkin/chromedriver')
-    # service = Service('/Users/asorokin/Desktop/careerist/CureSkin/geckodriver')
+    #service = Service('/Users/asorokin/Desktop/careerist/CureSkin/geckodriver')
+
     context.driver = webdriver.Chrome(service=service)
+    #context.driver = webdriver.Firefox(service=service)
+    #context.driver = webdriver.Safari()
+
+    ### CHROME ###
+    # options = webdriver.ChromeOptions()
+    # options.add_argument('--headless')
+    # options.add_argument("--window-size=1920, 1080")
+    # service = Service('/Users/asorokin/Desktop/careerist/CureSkin/chromedriver')
+    # context.driver = webdriver.Chrome(
+    #      chrome_options=options,
+    #      service=service
+    #  )
+    ######################################################
+
+
+    ######## FIREFOX #############
+    # options = webdriver.FirefoxOptions()
+    # options.add_argument('--headless')
+    # options.add_argument("--window-size=1920, 1080")
+    # service = Service('/Users/asorokin/Desktop/careerist/CureSkin/geckodriver')
+    # context.driver = webdriver.Firefox(
+    #     options=options,
+    #     service=service
+    # )
+    ################################
+
     context.driver.maximize_window()
     context.driver.implicitly_wait(5)
     context.driver.wait = WebDriverWait(context.driver, 10)
-
     context.app = Application(context.driver)
-    # context.driver = webdriver.Firefox(service=service)
-    # context.driver = webdriver.Safari()
-
-    ## HEADLESS MODE ####
-    # options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')
-    # context.driver = webdriver.Chrome(
-    #     chrome_options=options,
-    #     service=service
-    # )
 
     ### EventFiringWebDriver - log file ###
     ### for drivers ###
@@ -62,7 +79,6 @@ def browser_init(context, test_name):
     url = f'http://{bs_user}:{bs_key}@hub-cloud.browserstack.com/wd/hub'
     context.driver = webdriver.Remote(url, desired_capabilities=desired_cap)
 """
-
 
 
 def before_scenario(context, scenario):

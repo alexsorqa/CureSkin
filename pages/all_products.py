@@ -12,9 +12,9 @@ class AllProduct(Page):
     PRODUCT_NAMES = (By.XPATH, "//ul[@id='product-grid']//a/span")
 
     def verify_all_products(self):
-        expected_url = "https://shop.cureskin.com/collections/all"
-        current_url = self.driver.current_url
-        assert current_url == expected_url, f"Expected URL: {expected_url}, Actual URL: {current_url}"
+        expected_url = self.wait.until(EC.url_to_be("https://shop.cureskin.com/collections/all"))
+        #current_url = self.driver.current_url
+        assert expected_url, f"Expected URL: {expected_url}, Actual URL: {self.driver.current_url}"
 
     def add_to_cart(self):
         self.driver.first_product_name = self.find_elements(*self.PRODUCT_NAMES)[0].text
