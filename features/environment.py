@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.events import EventFiringWebDriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 from support.logger import logger, MyListener
 
@@ -49,10 +50,7 @@ def browser_init(context, test_name):
     # )
     ################################
 
-    context.driver.maximize_window()
-    context.driver.implicitly_wait(5)
-    context.driver.wait = WebDriverWait(context.driver, 10)
-    context.app = Application(context.driver)
+
 
     ### EventFiringWebDriver - log file ###
     ### for drivers ###
@@ -65,20 +63,34 @@ def browser_init(context, test_name):
 
     # for browerstack ###
     # Register for BrowserStack, then grab it from https://www.browserstack.com/accounts/settings
-"""    bs_user = ''
-    bs_key = ''
+    # bs_user = 'bonusbonum1'
+    # bs_key = 'GpWRsQ9nzqQzZc6HDK8U'
+    #
+    # desired_cap = {
+    #     'browserName': 'Firefox',
+    #     'bstack:options': {
+    #         'os': 'Windows',
+    #         'osVersion': '11',
+    #         'sessionName': test_name
+    #     }
+    # }
+    # url = f'http://{bs_user}:{bs_key}@hub-cloud.browserstack.com/wd/hub'
+    # context.driver = webdriver.Remote(url, desired_capabilities=desired_cap)
 
-    desired_cap = {
-        'browserName': 'Firefox',
-        'bstack:options': {
-            'os': 'Windows',
-            'osVersion': '10',
-            'sessionName': test_name
-        }
-    }
-    url = f'http://{bs_user}:{bs_key}@hub-cloud.browserstack.com/wd/hub'
-    context.driver = webdriver.Remote(url, desired_capabilities=desired_cap)
-"""
+
+
+    ###LOCAL MOBILE EMULATION###
+    mobile_emulation = {
+        "deviceMetrics": {"width": 1024, "height": 1366, "pixelRatio": 2.0},
+        "userAgent": "Mozilla/5.0 (iPad; CPU OS 11_1 like Mac OS X) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/11.0 Mobile/15B101 Safari/604.1"}
+    chrome_options = Options()
+    chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
+    context.driver = webdriver.Chrome(chrome_options=chrome_options)
+
+    context.driver.maximize_window()
+    context.driver.implicitly_wait(5)
+    context.driver.wait = WebDriverWait(context.driver, 10)
+    context.app = Application(context.driver)
 
 
 def before_scenario(context, scenario):
@@ -97,8 +109,8 @@ def after_step(context, step):
         logger.error(f'Step failed: {step}')
         print('\nStep failed: ', step)
         # Mark test case as FAILED on BrowserStack:
-        # context.driver.execute_script(
-        #     'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Step failed"}}')
+        #context.driver.execute_script(
+            #'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Step failed"}}')
 
 
 def after_scenario(context, feature):
